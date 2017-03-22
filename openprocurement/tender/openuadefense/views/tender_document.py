@@ -10,7 +10,6 @@ from openprocurement.tender.openuadefense.constants import TENDERING_EXTRA_PERIO
 from openprocurement.tender.openuadefense.validation import validate_tender_period_extension_with_working_days_in_active_tendering
 
 
-
 @optendersresource(name='aboveThresholdUA.defense:Tender Documents',
                    collection_path='/tenders/{tender_id}/documents',
                    path='/tenders/{tender_id}/documents/{document_id}',
