@@ -16,6 +16,7 @@ from openprocurement.tender.openua.tests.tender_blanks import (
     # TenderUAResourceTest
     empty_listing,
     create_tender_generated,
+    patch_tenderPeriod
 )
 
 from openprocurement.tender.openuadefense.tests.base import (
@@ -47,12 +48,14 @@ class TenderUAResourceTest(BaseTenderUAWebTest, TenderResourceTestMixin):
 
     initial_data = test_tender_data
 
+    tender_period_days = '6 working'
+
     test_empty_listing = snitch(empty_listing)
     test_create_tender_invalid = snitch(create_tender_invalid)
     test_create_tender_generated = snitch(create_tender_generated)
     test_patch_tender = snitch(patch_tender)
     test_patch_tender_ua = snitch(patch_tender_ua)
-
+    test_patch_tenderPeriod = snitch(patch_tenderPeriod)
 
 class TenderUAProcessTest(BaseTenderUAWebTest, TenderUaProcessTestMixin):
     initial_data = test_tender_data
