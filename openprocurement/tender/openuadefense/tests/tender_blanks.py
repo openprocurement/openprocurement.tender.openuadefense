@@ -317,21 +317,6 @@ def patch_tender(self):
     self.assertEqual(response.content_type, 'application/json')
     self.assertNotEqual(response.json['data']['procuringEntity']['kind'], 'general')
 
-    response = self.app.patch_json('/tenders/{}'.format(tender['id']),
-        {'data': {'tenderPeriod': {'startDate': tender['enquiryPeriod']['endDate']}}},
-        status=422
-    )
-    self.assertEqual(response.status, '422 Unprocessable Entity')
-    self.assertEqual(response.content_type, 'application/json')
-    self.assertEqual(response.json['errors'], [{
-            "location": "body",
-            "name": "tenderPeriod",
-            "description": [
-                "tenderPeriod should be greater than 6 working days"
-            ]
-        }
-    ])
-
     response = self.app.patch_json('/tenders/{}?acc_token={}'.format(
         tender['id'], owner_token), {'data': {'procurementMethodRationale': 'Open'}})
     self.assertEqual(response.status, '200 OK')
