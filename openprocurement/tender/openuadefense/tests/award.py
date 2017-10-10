@@ -49,6 +49,7 @@ from openprocurement.tender.openua.tests.award_blanks import (
     create_tender_award_complaint,
     patch_tender_award_complaint,
     review_tender_award_complaint,
+    review_tender_award_stopping_complaint,
     # TenderLotAwardComplaintResourceTest
     create_tender_lot_award_complaint,
     patch_tender_lot_award_complaint,
@@ -62,7 +63,7 @@ from openprocurement.tender.openua.tests.award_blanks import (
     patch_tender_lots_award_complaint_document,
 )
 
-from openprocurement.tender.openuadefense.tests.base import BaseTenderUAContentWebTest
+from openprocurement.tender.openuadefense.tests.base import BaseTenderUAContentWebTest, BaseTenderUAWebTest
 from openprocurement.tender.openuadefense.tests.award_blanks import (
     # TenderAwardComplaintResourceTest
     review_tender_award_claim,
@@ -106,14 +107,21 @@ class TenderAwardComplaintResourceTest(BaseTenderUAContentWebTest):
     initial_bids = test_bids
 
     def setUp(self):
-        super(TenderAwardComplaintResourceTest, self).setUp()
-        self.bid_token = self.initial_bids_tokens[self.initial_bids[0]['id']]
+        BaseTenderUAWebTest.setUp(self)
+        # Create tender
+        self.app.authorization = ('Basic', ('broker', ''))
+        self.create_tender()
+
         # Create award
+        self.app.authorization = ('Basic', ('token', ''))
         response = self.app.post_json('/tenders/{}/awards'.format(
             self.tender_id), {'data': {'suppliers': [test_organization], 'status': 'pending', 'bid_id': self.initial_bids[0]['id']}})
         award = response.json['data']
         self.award_id = award['id']
         self.app.patch_json('/tenders/{}/awards/{}'.format(self.tender_id, self.award_id), {'data': {'status': 'active', "qualified": True, "eligible": True}})
+
+        self.bid_token = self.initial_bids_tokens[self.initial_bids[0]['id']]
+        self.app.authorization = ('Basic', ('broker', ''))
 
     test_create_tender_award_complaint_invalid = snitch(create_tender_award_complaint_invalid)
     test_create_tender_award_claim = snitch(create_tender_award_claim)
@@ -121,6 +129,7 @@ class TenderAwardComplaintResourceTest(BaseTenderUAContentWebTest):
     test_create_tender_award_complaint = snitch(create_tender_award_complaint)
     test_patch_tender_award_complaint = snitch(patch_tender_award_complaint)
     test_review_tender_award_complaint = snitch(review_tender_award_complaint)
+    test_review_tender_award_stopping_complaint = snitch(review_tender_award_stopping_complaint)
     test_review_tender_award_claim = snitch(review_tender_award_claim)
     test_get_tender_award_complaint = snitch(get_tender_award_complaint)
     test_get_tender_award_complaints = snitch(get_tender_award_complaints)

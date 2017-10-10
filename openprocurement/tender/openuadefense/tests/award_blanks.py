@@ -7,7 +7,7 @@ from openprocurement.tender.belowthreshold.tests.base import test_organization
 def review_tender_award_claim(self):
     for status in ['invalid', 'resolved', 'declined']:
         #self.app.authorization = ('Basic', ('token', ''))
-        response = self.app.post_json('/tenders/{}/awards/{}/complaints'.format(self.tender_id, self.award_id), {'data': {
+        response = self.app.post_json('/tenders/{}/awards/{}/complaints?acc_token={}'.format(self.tender_id, self.award_id, self.bid_token), {'data': {
             'title': 'complaint title',
             'description': 'complaint description',
             'author': test_organization,
