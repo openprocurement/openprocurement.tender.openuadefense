@@ -12,4 +12,4 @@ TENDER_PERIOD = timedelta(days=6)
 ENQUIRY_PERIOD_TIME = timedelta(days=3)
 TENDERING_EXTRA_PERIOD = timedelta(days=2)
 
-CALCULATE_BUSINESS_DATE_FROM = datetime(2017, 9, 8, tzinfo=TZ)
+CALCULATE_BUSINESS_DATE_FROM = datetime(2017, 8, 31, tzinfo=TZ)
